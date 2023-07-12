@@ -32,7 +32,7 @@ export class UsersController {
   // }
 
   @Get('/whoami')
-  getMe(@CurrentUser() user: string) {
+  getMe(@CurrentUser() user: User) {
     return user;
   }
 
