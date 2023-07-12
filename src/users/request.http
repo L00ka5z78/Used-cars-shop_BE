@@ -1,5 +1,5 @@
 
-### Create a new user in database
+### Signuup and create a new user in database
 POST http://localhost:3000/auth/signup
 content-type: application/json
 
@@ -20,6 +20,9 @@ content-type: application/json
 ### get currently logged in user (get me)
 
 GET http://localhost:3000/auth/whoami
+
+### Sign out logged in user
+POST http://localhost:3000/auth/signout
 
 
 ### Find particular user with give id
