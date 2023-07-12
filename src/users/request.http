@@ -1,12 +1,29 @@
 
-### Create a new user in database
+### Signuup and create a new user in database
 POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "johnny@bravo.com",
-    "password": "1234abcd"
+    "email": "eric@cartman.com",
+    "password": "123abc"
 }
+
+### sign in user
+POST http://localhost:3000/auth/signin
+content-type: application/json
+
+{
+    "email": "eric@cartman.com",
+    "password": "123abc"
+}
+
+### get currently logged in user (get me)
+
+GET http://localhost:3000/auth/whoami
+
+### Sign out logged in user
+POST http://localhost:3000/auth/signout
+
 
 ### Find particular user with give id
 
@@ -28,3 +45,9 @@ content-type: application/json
 {
     "email": "abc@abc.com"
 }
+
+# ### set color testing purposes
+# GET http://localhost:3000/auth/colors/red
+
+# ### get color
+# GET http://localhost:3000/auth/colors
