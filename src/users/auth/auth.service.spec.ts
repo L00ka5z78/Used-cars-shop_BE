@@ -42,8 +42,6 @@ describe('AUTH service', () => {
   });
 
   it('can create an instance of auth service', async () => {
-    //create fake copy of users service
-
     expect(service).toBeDefined();
   });
 
@@ -81,13 +79,13 @@ describe('AUTH service', () => {
   });
 
   it('returns user if correct passowrd is provided', async () => {
-    await service.signin('testing@email.com', 'mypassword');
+    await service.signup('testing@email.com', 'mypassword');
 
     const user = await service.signin('testing@email.com', 'mypassword');
     expect(user).toBeDefined();
 
-    // const user = await service.signup('testing@email.com', 'mypassword');
-    // console.log(user); //to get salted hashed password in log
+    //     // const user = await service.signup('testing@email.com', 'mypassword');
+    //     // console.log(user); //to get salted hashed password in log
   });
 
   it('throws an error if user signs up with email that is in use', async () => {
@@ -97,13 +95,13 @@ describe('AUTH service', () => {
     );
   });
 
-  it('throws if signin is called with an unused email', async () => {
+  it('throws error if signin is called with an unused email', async () => {
     await expect(
       service.signin('asdflkj@asdlfkj.com', 'passdflkj'),
     ).rejects.toThrow(NotFoundException);
   });
 
-  it('throws if an invalid password is provided', async () => {
+  it('throws error if an invalid password is provided', async () => {
     await service.signup('laskdjf@alskdfj.com', 'password');
     await expect(
       service.signin('laskdjf@alskdfj.com', 'laksdlfkj'),
