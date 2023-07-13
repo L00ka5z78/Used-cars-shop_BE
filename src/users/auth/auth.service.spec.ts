@@ -9,14 +9,23 @@ describe('AUTH service', () => {
   let fakeUsersService: Partial<UsersService>;
 
   beforeEach(async () => {
+    const users: User[] = [];
+
     fakeUsersService = {
-      findUserByEmail: () => Promise.resolve([]),
-      createUser: (email: string, password: string) =>
-        Promise.resolve({
-          id: 1,
+      findUserByEmail: (email: string) => {
+        const filteredUsers = users.filter((user) => user.email === email);
+        return Promise.resolve(filteredUsers);
+      },
+
+      createUser: (email: string, password: string) => {
+        const user = {
+          id: Math.floor(Math.random() * 99999),
           email,
           password,
-        } as User),
+        } as User;
+        users.push(user);
+        return Promise.resolve(user);
+      },
     };
 
     const module = await Test.createTestingModule({
@@ -68,6 +77,36 @@ describe('AUTH service', () => {
       ]);
     await expect(
       service.signin('laskdjf@alskdfj.com', 'passowrd'),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('returns user if correct passowrd is provided', async () => {
+    await service.signin('testing@email.com', 'mypassword');
+
+    const user = await service.signin('testing@email.com', 'mypassword');
+    expect(user).toBeDefined();
+
+    // const user = await service.signup('testing@email.com', 'mypassword');
+    // console.log(user); //to get salted hashed password in log
+  });
+
+  it('throws an error if user signs up with email that is in use', async () => {
+    await service.signup('asdf@asdf.com', 'asdf');
+    await expect(service.signup('asdf@asdf.com', 'asdf')).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
+  it('throws if signin is called with an unused email', async () => {
+    await expect(
+      service.signin('asdflkj@asdlfkj.com', 'passdflkj'),
+    ).rejects.toThrow(NotFoundException);
+  });
+
+  it('throws if an invalid password is provided', async () => {
+    await service.signup('laskdjf@alskdfj.com', 'password');
+    await expect(
+      service.signin('laskdjf@alskdfj.com', 'laksdlfkj'),
     ).rejects.toThrow(BadRequestException);
   });
 });
