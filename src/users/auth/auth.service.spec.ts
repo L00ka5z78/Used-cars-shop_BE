@@ -2,11 +2,11 @@ import { Test } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users.service';
 import { User } from '../entities';
+import { BadRequestException } from '@nestjs/common';
 
-describe('AUTH CONTROLLER', () => {
-  it('can create an instance of auth service', async () => {
-    //create fake copy of users service
-
+describe('AUTH service', () => {
+  let service: AuthService;
+  beforeEach(async () => {
     const fakeUsersService: Partial<UsersService> = {
       findUserByEmail: () => Promise.resolve([]),
       createUser: (email: string, password: string) =>
@@ -27,8 +27,21 @@ describe('AUTH CONTROLLER', () => {
       ],
     }).compile();
 
-    const service = module.get(AuthService);
+    service = module.get(AuthService);
+  });
+
+  it('can create an instance of auth service', async () => {
+    //create fake copy of users service
 
     expect(service).toBeDefined();
+  });
+
+  it('creates new user with hashed and salted password', async () => {
+    const user = await service.signup('testing@purposes.email', 'testing');
+
+    expect(user.password).not.toEqual('testing');
+    const [salt, hash] = user.password.split('.');
+    expect(salt).toBeDefined();
+    expect(hash).toBeDefined();
   });
 });
