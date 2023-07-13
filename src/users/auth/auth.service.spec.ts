@@ -54,4 +54,20 @@ describe('AUTH service', () => {
       service.signup('testing@purposes.email', 'testing'),
     ).rejects.toThrow(BadRequestException);
   });
+
+  it('throws error if signin is called with an unused email', async () => {
+    await expect(
+      service.signin('unused@email.com', 'unusedpassword'),
+    ).rejects.toThrow(NotFoundException);
+  });
+
+  it('throws error if an invalid password is provided', async () => {
+    fakeUsersService.findUserByEmail = () =>
+      Promise.resolve([
+        { email: 'asdf@asdf.com', password: 'laskdjf' } as User,
+      ]);
+    await expect(
+      service.signin('laskdjf@alskdfj.com', 'passowrd'),
+    ).rejects.toThrow(BadRequestException);
+  });
 });
