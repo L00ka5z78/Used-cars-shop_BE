@@ -12,3 +12,12 @@ content-type: application/json
    "lat": 0,
    "price": 12300
 }
+
+###approve existing report
+
+PATCH http://localhost:3000/reports/4
+content-type: application/json
+
+{
+    "approved": false
+}
