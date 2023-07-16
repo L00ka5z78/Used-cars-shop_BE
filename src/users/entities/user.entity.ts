@@ -18,8 +18,11 @@ export class User {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ default: true })
   password: string;
+
+  @Column()
+  admin: boolean;
 
   @OneToMany(() => Report, (report) => report.user)
   reports: Report[];
