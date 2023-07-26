@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Report } from './entities';
 import { Repository } from 'typeorm';
-import { CreateReportDto } from './dtos';
+import { CreateReportDto, GetEstimateDto } from './dtos';
 import { User } from '../users/entities';
 
 @Injectable()
@@ -11,6 +11,22 @@ export class ReportsService {
     @InjectRepository(Report)
     private repository: Repository<Report>,
   ) {}
+
+  createEstimate({ make, model, lng, lat, year, mileage }: GetEstimateDto) {
+    return this.repository
+      .createQueryBuilder()
+      .select('AVG(price)', 'price')
+      .where('make = :make', { make })
+      .andWhere('model = :model', { model })
+      .andWhere('lng -:lng BETWEEN -5 AND 5', { lng })
+      .andWhere('lat -:lat BETWEEN -5 AND 5', { lat })
+      .andWhere('year -:year BETWEEN -3 AND 3', { year })
+      .andWhere('approved IS TRUE')
+      .orderBy('ABS(mileage - :mileage)', 'DESC')
+      .setParameters({ mileage })
+      .limit(3)
+      .getRawOne();
+  }
 
   createReport(reportDto: CreateReportDto, user: User) {
     const report = this.repository.create(reportDto);
