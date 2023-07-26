@@ -18,10 +18,10 @@ export class User {
   @Column()
   email: string;
 
-  @Column({ default: true })
+  @Column()
   password: string;
 
-  @Column()
+  @Column({ default: true })
   admin: boolean;
 
   @OneToMany(() => Report, (report) => report.user)
