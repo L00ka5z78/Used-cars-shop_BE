@@ -22,4 +22,7 @@ npm run start:dev
 
 More useful scripts in package.json file
 
+There is standard CRUD writen in NestJs with authentication and authorization. 
+In addition there are built in few guards and decorators
+
 
