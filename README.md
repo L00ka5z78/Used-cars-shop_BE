@@ -25,4 +25,7 @@ More useful scripts in package.json file
 There is standard CRUD writen in NestJs with authentication and authorization. 
 In addition there are built in few guards and decorators
 
+Code is not merged into Main branch. Whole code is located on Develop branch. 
+This readme file will be updated soon. Lack of time to do it lately...
+
 
